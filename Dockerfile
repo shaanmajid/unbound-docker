@@ -1,8 +1,8 @@
-FROM debian:bookworm AS openssl
-LABEL maintainer="Matthew Vance"
+FROM debian:trixie AS openssl
+LABEL maintainer="Shaan Majid"
 
-ENV VERSION_OPENSSL=openssl-3.3.2 \
-    SHA256_OPENSSL=2e8a40b01979afe8be0bbfb3de5dc1c6709fedb46d6c89c10da114ab5fc3d281 \
+ENV VERSION_OPENSSL=openssl-3.6.0 \
+    SHA256_OPENSSL=b6a5f44b7eb69e3fa35dbf15524405b44837a481d43d81daddde3ff21fcbb8e9 \
     SOURCE_OPENSSL=https://www.openssl.org/source/ \
     # OpenSSL OMC
     OPGP_OPENSSL_1=EFC0A467D613CB83C7ED6D30D894E2CE8B3D79F5 \
@@ -55,13 +55,13 @@ RUN set -e -x && \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-FROM debian:bookworm AS unbound
-LABEL maintainer="Matthew Vance"
+FROM debian:trixie AS unbound
+LABEL maintainer="Shaan Majid"
 
 ENV NAME=unbound \
-    UNBOUND_VERSION=1.22.0 \
-    UNBOUND_SHA256=c5dd1bdef5d5685b2cedb749158dd152c52d44f65529a34ac15cd88d4b1b3d43 \
-    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.22.0.tar.gz
+    UNBOUND_VERSION=1.23.0 \
+    UNBOUND_SHA256=959bd5f3875316d7b3f67ee237a56de5565f5b35fc9b5fc3cea6cfe735a03bb8 \
+    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.23.0.tar.gz
 
 WORKDIR /tmp/src
 
@@ -82,7 +82,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
     echo "${UNBOUND_SHA256} *unbound.tar.gz" | sha256sum -c - && \
     tar xzf unbound.tar.gz && \
     rm -f unbound.tar.gz && \
-    cd unbound-1.22.0 && \
+    cd unbound-1.23.0 && \
     groupadd _unbound && \
     useradd -g _unbound -s /dev/null -d /etc _unbound && \
     ./configure \
@@ -109,8 +109,8 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
         /var/lib/apt/lists/*
 
 
-FROM debian:bookworm
-LABEL maintainer="Matthew Vance"
+FROM debian:trixie
+LABEL maintainer="Shaan Majid"
 
 ENV NAME=unbound \
     SUMMARY="${NAME} is a validating, recursive, and caching DNS resolver." \
@@ -148,12 +148,12 @@ WORKDIR /opt/unbound/
 ENV PATH /opt/unbound/sbin:"$PATH"
 
 LABEL org.opencontainers.image.version=${UNBOUND_VERSION} \
-      org.opencontainers.image.title="mvance/unbound" \
+      org.opencontainers.image.title="shaanmajid/unbound" \
       org.opencontainers.image.description="a validating, recursive, and caching DNS resolver" \
-      org.opencontainers.image.url="https://github.com/MatthewVance/unbound-docker" \
-      org.opencontainers.image.vendor="Matthew Vance" \
+      org.opencontainers.image.url="https://github.com/shaanmajid/unbound-docker" \
+      org.opencontainers.image.vendor="Shaan Majid" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://github.com/MatthewVance/unbound-docker"
+      org.opencontainers.image.source="https://github.com/shaanmajid/unbound-docker"
 
 EXPOSE 53/tcp
 EXPOSE 53/udp
