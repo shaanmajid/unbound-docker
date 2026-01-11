@@ -5,7 +5,7 @@ A maintained fork of [mvance/unbound-docker](https://github.com/MatthewVance/unb
 ## Tags
 
 - [`latest`](https://hub.docker.com/r/shaanmajid/unbound/tags) — most recent stable release
-- [`1.23.0`](https://github.com/shaanmajid/unbound-docker/releases), `1.23`, `1` — semver tags
+- [`1.23.1`](https://github.com/shaanmajid/unbound-docker/releases), `1.23`, `1` — semver tags
 
 Images are published to [Docker Hub](https://hub.docker.com/r/shaanmajid/unbound) and [GHCR](https://github.com/shaanmajid/unbound-docker/pkgs/container/unbound). See the [Dockerfile](Dockerfile) for build details.
 
