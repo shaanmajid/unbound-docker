@@ -1,10 +1,14 @@
 # Unbound DNS Server Docker Image
 
-This is a maintained fork of Matthew Vance's unbound-docker focused on keeping dependencies current and using GitHub Actions for releases.
+This is a maintained fork of Matthew Vance's unbound-docker (https://github.com/MatthewVance/unbound-docker) focused on keeping dependencies current and using GitHub Actions for releases. The remainder of this README is preserved from the upstream project with minimal edits for the fork.
 
 ## Supported tags and respective `Dockerfile` links
-- [`latest` (*Dockerfile*)](https://github.com/shaanmajid/unbound-docker/blob/master/Dockerfile)
-- versioned tags (e.g. `1.x.y`) are published from git tags
+The current Dockerfile lives on the master branch:
+- https://github.com/shaanmajid/unbound-docker/blob/master/Dockerfile
+
+Find the latest release tags in GitHub Releases and Docker Hub:
+- GitHub Releases: https://github.com/shaanmajid/unbound-docker/releases
+- Docker Hub tags: https://hub.docker.com/r/shaanmajid/unbound/tags
 
 ## What is Unbound?
 
