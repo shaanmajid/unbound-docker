@@ -1,0 +1,33 @@
+{
+  "extends": ["config:base"],
+  "schedule": ["every day"],
+  "timezone": "America/Chicago",
+  "dependencyDashboard": true,
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions"
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "groupName": "docker-base"
+    }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["UNBOUND_VERSION=(?<currentValue>\\S+)"],
+      "depNameTemplate": "NLnetLabs/unbound",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
+    },
+    {
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["VERSION_OPENSSL=openssl-(?<currentValue>\\S+)"],
+      "depNameTemplate": "openssl/openssl",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "semver"
+    }
+  ]
+}
