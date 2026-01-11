@@ -1,0 +1,10 @@
+.git
+.github
+.dockerignore
+Dockerfile
+README.md
+LICENSE
+CHANGELOG.md
+k8s
+renovate.json
+*.md
