@@ -59,9 +59,9 @@ FROM debian:trixie AS unbound
 LABEL maintainer="Shaan Majid"
 
 ENV NAME=unbound \
-    UNBOUND_VERSION=1.23.0 \
-    UNBOUND_SHA256=959bd5f3875316d7b3f67ee237a56de5565f5b35fc9b5fc3cea6cfe735a03bb8 \
-    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.23.0.tar.gz
+    UNBOUND_VERSION=1.23.1 \
+    UNBOUND_SHA256=6a6b117c799d8de3868643397e0fd71591f6d42f4473f598bdb22609ff362590 \
+    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.23.1.tar.gz
 
 WORKDIR /tmp/src
 
@@ -82,7 +82,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
     echo "${UNBOUND_SHA256} *unbound.tar.gz" | sha256sum -c - && \
     tar xzf unbound.tar.gz && \
     rm -f unbound.tar.gz && \
-    cd unbound-1.23.0 && \
+    cd unbound-$UNBOUND_VERSION && \
     groupadd _unbound && \
     useradd -g _unbound -s /dev/null -d /etc _unbound && \
     ./configure \
@@ -112,7 +112,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
 FROM debian:trixie
 LABEL maintainer="Shaan Majid"
 
-ARG UNBOUND_VERSION=1.23.0
+ARG UNBOUND_VERSION=1.23.1
 ENV NAME=unbound
 ENV SUMMARY="Unbound is a validating, recursive, and caching DNS resolver." \
     DESCRIPTION="Unbound is a validating, recursive, and caching DNS resolver."
