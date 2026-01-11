@@ -12,22 +12,68 @@
     {
       "matchManagers": ["dockerfile"],
       "groupName": "docker-base"
+    },
+    {
+      "matchDepNames": ["NLnetLabs/unbound", "unbound-sha"],
+      "groupName": "unbound"
+    },
+    {
+      "matchDepNames": ["openssl/openssl", "openssl-sha"],
+      "groupName": "openssl"
     }
   ],
   "regexManagers": [
     {
       "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["UNBOUND_VERSION=(?<currentValue>\\S+)"],
+      "matchStrings": ["UNBOUND_VERSION=(?<currentValue>\\S+)"] ,
       "depNameTemplate": "NLnetLabs/unbound",
       "datasourceTemplate": "github-releases",
       "versioningTemplate": "semver"
     },
     {
       "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["VERSION_OPENSSL=openssl-(?<currentValue>\\S+)"],
+      "matchStrings": ["VERSION_OPENSSL=openssl-(?<currentValue>\\S+)"] ,
       "depNameTemplate": "openssl/openssl",
       "datasourceTemplate": "github-releases",
       "versioningTemplate": "semver"
     }
-  ]
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/"],
+      "matchStrings": [
+        "UNBOUND_VERSION=(?<currentValue>\\S+)\\s*\\\\n\\s*UNBOUND_SHA256=(?<currentDigest>\\S+)"
+      ],
+      "depNameTemplate": "unbound-sha",
+      "datasourceTemplate": "custom.unbound-sha",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/"],
+      "matchStrings": [
+        "VERSION_OPENSSL=openssl-(?<currentValue>\\S+)\\s*\\\\n\\s*SHA256_OPENSSL=(?<currentDigest>\\S+)"
+      ],
+      "depNameTemplate": "openssl-sha",
+      "datasourceTemplate": "custom.openssl-sha",
+      "versioningTemplate": "semver"
+    }
+  ],
+  "customDatasources": {
+    "unbound-sha": {
+      "defaultRegistryUrlTemplate": "https://nlnetlabs.nl/downloads/unbound/unbound-{{{currentValue}}}.tar.gz.sha256",
+      "format": "plain",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\":\"{{{currentValue}}}\",\"digest\": releases[0].version}]}"
+      ]
+    },
+    "openssl-sha": {
+      "defaultRegistryUrlTemplate": "https://www.openssl.org/source/openssl-{{{currentValue}}}.tar.gz.sha256",
+      "format": "plain",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\":\"{{{currentValue}}}\",\"digest\": $substringBefore(releases[0].version, \" \")}]}"
+      ]
+    }
+  }
 }
