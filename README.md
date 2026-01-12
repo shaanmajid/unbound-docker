@@ -389,6 +389,5 @@ details.
 
 - Docker: [Apache 2.0](https://github.com/docker/docker/blob/master/LICENSE)
 - DNSCrypt server Docker image: [ISC License](https://github.com/jedisct1/dnscrypt-server-docker/blob/master/LICENSE)
-- LibreSSL: [Various](http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/lib/libssl/src/LICENSE?rev=1.12&content-type=text/x-cvsweb-markup)
-- OpenSSL: [Apache-style license](https://www.openssl.org/source/license.html)
+- OpenSSL: [Apache 2.0](https://www.openssl.org/source/license.html)
 - Unbound: [BSD License](https://unbound.nlnetlabs.nl/svn/trunk/LICENSE)
