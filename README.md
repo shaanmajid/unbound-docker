@@ -31,6 +31,8 @@ Images are published to [Docker Hub](https://hub.docker.com/r/shaanmajid/unbound
 | `X.Y` | Latest patch for minor version (e.g., `1.24`) |
 | `X` | Latest for major version (e.g., `1`) |
 
+See [all available tags](https://hub.docker.com/r/shaanmajid/unbound/tags).
+
 ```console
 # From Docker Hub
 docker pull shaanmajid/unbound:latest
