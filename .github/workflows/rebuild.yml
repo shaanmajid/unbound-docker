@@ -1,0 +1,123 @@
+name: rebuild
+
+on:
+  schedule:
+    # Weekly on Sunday at 4:17 AM UTC
+    # - Sunday: lowest traffic day for GitHub Actions
+    # - 4 AM UTC: early morning, low traffic
+    # - :17 (not :00): avoids hourly congestion when many workflows start
+    - cron: '17 4 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOCKERHUB_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/unbound
+  GHCR_IMAGE: ghcr.io/${{ github.repository_owner }}/unbound
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Get current version and build time
+        id: version
+        run: |
+          version=$(sed -n 's/.*UNBOUND_VERSION=\([0-9.]*\).*/\1/p' Dockerfile | head -1)
+          if [[ -z "$version" ]]; then
+            echo "::error::Failed to extract UNBOUND_VERSION from Dockerfile"
+            exit 1
+          fi
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid version format: $version (expected X.Y.Z)"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ env.DOCKERHUB_IMAGE }}:latest
+            ${{ env.DOCKERHUB_IMAGE }}:${{ steps.version.outputs.version }}
+            ${{ env.GHCR_IMAGE }}:latest
+            ${{ env.GHCR_IMAGE }}:${{ steps.version.outputs.version }}
+          labels: |
+            org.opencontainers.image.version=${{ steps.version.outputs.version }}
+            org.opencontainers.image.title=${{ env.DOCKERHUB_IMAGE }}
+            org.opencontainers.image.description=a validating, recursive, and caching DNS resolver
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ steps.version.outputs.created }}
+          provenance: mode=max
+          sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Attest Docker Hub image
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-name: docker.io/${{ env.DOCKERHUB_IMAGE }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+
+      - name: Attest GHCR image
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-name: ${{ env.GHCR_IMAGE }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+
+      - name: Log rebuild to tracking issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          status="${{ job.status }}"
+          if [[ "$status" == "success" ]]; then
+            emoji="white_check_mark"
+          else
+            emoji="x"
+          fi
+          gh issue comment 9 --body "### :${emoji}: Rebuild ${status}
+
+          | Field | Value |
+          |-------|-------|
+          | **Date** | ${{ steps.version.outputs.created }} |
+          | **Version** | ${{ steps.version.outputs.version }} |
+          | **Commit** | \`${{ github.sha }}\` |
+          | **Digest** | \`${DIGEST:0:19}...\` |
+          | **Run** | [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
