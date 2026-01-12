@@ -112,12 +112,15 @@ jobs:
           else
             emoji="x"
           fi
+          # Truncate digest for display (sha256:abc123... -> sha256:abc123)
+          digest_short="${DIGEST:0:19}"
           gh issue comment 9 --body "### :${emoji}: Rebuild ${status}
 
           | Field | Value |
           |-------|-------|
           | **Date** | ${{ steps.version.outputs.created }} |
-          | **Version** | ${{ steps.version.outputs.version }} |
-          | **Commit** | \`${{ github.sha }}\` |
-          | **Digest** | \`${DIGEST:0:19}...\` |
+          | **Version** | [${{ steps.version.outputs.version }}](https://hub.docker.com/r/${{ vars.DOCKERHUB_USERNAME }}/unbound/tags?name=${{ steps.version.outputs.version }}) |
+          | **Commit** | [\`${{ github.sha }}\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) |
+          | **Digest** | \`${digest_short}...\` |
+          | **Images** | [Docker Hub](https://hub.docker.com/r/${{ vars.DOCKERHUB_USERNAME }}/unbound) ・ [GHCR](https://github.com/${{ github.repository }}/pkgs/container/unbound) |
           | **Run** | [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
