@@ -71,7 +71,7 @@ docker run \
 shaanmajid/unbound:latest
 ```
 
-By default, this image forwards queries Cloudflare DNS server over TLS. In other words, it does not act as a recursive server. The [unbound.sh file](data/unbound.sh) provides the configuration unless it is overriden as described below.
+By default, this image forwards queries to Cloudflare DNS over TLS. In other words, it does not act as a recursive server. The [unbound.sh file](data/unbound.sh) provides the configuration unless it is overriden as described below.
 
 *Note: The example [unbound.conf](unbound.conf) file is different from the one set by [unbound.sh file](data/unbound.sh). The example is provided to help you re-configure this as a [recursive server](https://github.com/shaanmajid/unbound-docker#recursive-config).*
 
@@ -238,8 +238,7 @@ shaanmajid/unbound:latest
 
 The following `docker-compose.yml` file is a starting point. The provided example shows how to override default forward and serve custom DNS records for your LAN. It requires `forward-records.conf` and `a-records.conf` files be provided at the `./my_conf/`. 
 
-```
-version: '3'
+```yaml
 services:
   unbound:
     container_name: unbound
@@ -300,7 +299,7 @@ records and the main unbound configuration file.
 
 ## Recursive config
 
-The default config forwards forwards DNS queries to another DNS server over TLS. If you would rather this work as a recursive DNS server, you must [use a customized Unbound configuration](https://github.com/shaanmajid/unbound-docker#use-a-customized-unbound-configuration). An [example unbound.conf](https://github.com/shaanmajid/unbound-docker/blob/master/unbound.conf) file to configure unbound as a recursive server is available as a guide.
+The default config forwards DNS queries to another DNS server over TLS. If you would rather this work as a recursive DNS server, you must [use a customized Unbound configuration](https://github.com/shaanmajid/unbound-docker#use-a-customized-unbound-configuration). An [example unbound.conf](https://github.com/shaanmajid/unbound-docker/blob/master/unbound.conf) file to configure unbound as a recursive server is available as a guide.
 
 ## Performance
 
