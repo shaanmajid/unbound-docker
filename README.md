@@ -1,18 +1,59 @@
 # Unbound DNS Server Docker Image
 
-A maintained fork of [mvance/unbound-docker](https://github.com/MatthewVance/unbound-docker) with current dependencies and automated releases via GitHub Actions.
+[![Build](https://github.com/shaanmajid/unbound-docker/actions/workflows/release.yml/badge.svg)](https://github.com/shaanmajid/unbound-docker/actions/workflows/release.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/shaanmajid/unbound)](https://hub.docker.com/r/shaanmajid/unbound)
+[![Image Size](https://img.shields.io/docker/image-size/shaanmajid/unbound/latest)](https://hub.docker.com/r/shaanmajid/unbound)
+
+A maintained fork of [mvance/unbound-docker](https://github.com/MatthewVance/unbound-docker) with multi-architecture support, current dependencies, and automated releases.
+
+## Supported Architectures
+
+Images are built for **linux/amd64** and **linux/arm64**. Docker automatically pulls the correct image for your platform.
+
+To pull a specific architecture:
+
+```console
+# Pull for amd64 (x86_64)
+docker pull --platform linux/amd64 shaanmajid/unbound:latest
+
+# Pull for arm64 (Apple Silicon, Raspberry Pi 4, etc.)
+docker pull --platform linux/arm64 shaanmajid/unbound:latest
+```
 
 ## Tags
 
-- [`latest`](https://hub.docker.com/r/shaanmajid/unbound/tags) — most recent stable release
-- [`1.24.2`](https://github.com/shaanmajid/unbound-docker/releases), `1.24`, `1` — semver tags
+Images are published to [Docker Hub](https://hub.docker.com/r/shaanmajid/unbound) and [GHCR](https://github.com/shaanmajid/unbound-docker/pkgs/container/unbound):
 
-Images are published to [Docker Hub](https://hub.docker.com/r/shaanmajid/unbound) and [GHCR](https://github.com/shaanmajid/unbound-docker/pkgs/container/unbound). See the [Dockerfile](Dockerfile) for build details.
+| Tag | Description |
+|-----|-------------|
+| `latest` | Most recent stable release |
+| `X.Y.Z` | Specific version (e.g., `1.24.0`) |
+| `X.Y` | Latest patch for minor version (e.g., `1.24`) |
+| `X` | Latest for major version (e.g., `1`) |
+
+```console
+# From Docker Hub
+docker pull shaanmajid/unbound:latest
+
+# From GHCR
+docker pull ghcr.io/shaanmajid/unbound:latest
+```
+
+Image versions correspond to the bundled [Unbound](https://nlnetlabs.nl/projects/unbound/about/) version. See the [Dockerfile](Dockerfile) for build details and the [releases page](https://github.com/shaanmajid/unbound-docker/releases) for changelogs.
 
 ## What is Unbound?
 
 Unbound is a validating, recursive, and caching DNS resolver.
 > [unbound.net](https://unbound.net/)
+
+## Features
+
+This image is compiled with the following features enabled:
+
+- **dnstap** — DNS telemetry via Frame Streams protocol for logging and monitoring
+- **EDNS Client Subnet (ECS)** — Allows upstream servers to tailor responses based on client location
+- **DNS-over-TLS/HTTPS** — Forward queries to upstream resolvers over encrypted connections
+- **TCP Fast Open** — Reduced latency for TCP connections (client and server)
 
 ## How to use this image
 
@@ -30,7 +71,7 @@ docker run \
 shaanmajid/unbound:latest
 ```
 
-By default, this image forwards queries Cloudflare DNS server over TLS. In other words, it does not act as a recursive server. The [unbound.sh file](data/unbound.sh) provides the configuration unless it is overriden as described below.
+By default, this image forwards queries to Cloudflare DNS over TLS. In other words, it does not act as a recursive server. The [unbound.sh file](data/unbound.sh) provides the configuration unless it is overriden as described below.
 
 *Note: The example [unbound.conf](unbound.conf) file is different from the one set by [unbound.sh file](data/unbound.sh). The example is provided to help you re-configure this as a [recursive server](https://github.com/shaanmajid/unbound-docker#recursive-config).*
 
@@ -197,8 +238,7 @@ shaanmajid/unbound:latest
 
 The following `docker-compose.yml` file is a starting point. The provided example shows how to override default forward and serve custom DNS records for your LAN. It requires `forward-records.conf` and `a-records.conf` files be provided at the `./my_conf/`. 
 
-```
-version: '3'
+```yaml
 services:
   unbound:
     container_name: unbound
@@ -259,7 +299,7 @@ records and the main unbound configuration file.
 
 ## Recursive config
 
-The default config forwards forwards DNS queries to another DNS server over TLS. If you would rather this work as a recursive DNS server, you must [use a customized Unbound configuration](https://github.com/shaanmajid/unbound-docker#use-a-customized-unbound-configuration). An [example unbound.conf](https://github.com/shaanmajid/unbound-docker/blob/master/unbound.conf) file to configure unbound as a recursive server is available as a guide.
+The default config forwards DNS queries to another DNS server over TLS. If you would rather this work as a recursive DNS server, you must [use a customized Unbound configuration](https://github.com/shaanmajid/unbound-docker#use-a-customized-unbound-configuration). An [example unbound.conf](https://github.com/shaanmajid/unbound-docker/blob/master/unbound.conf) file to configure unbound as a recursive server is available as a guide.
 
 ## Performance
 
@@ -348,6 +388,5 @@ details.
 
 - Docker: [Apache 2.0](https://github.com/docker/docker/blob/master/LICENSE)
 - DNSCrypt server Docker image: [ISC License](https://github.com/jedisct1/dnscrypt-server-docker/blob/master/LICENSE)
-- LibreSSL: [Various](http://cvsweb.openbsd.org/cgi-bin/cvsweb/src/lib/libssl/src/LICENSE?rev=1.12&content-type=text/x-cvsweb-markup)
-- OpenSSL: [Apache-style license](https://www.openssl.org/source/license.html)
+- OpenSSL: [Apache 2.0](https://www.openssl.org/source/license.html)
 - Unbound: [BSD License](https://unbound.nlnetlabs.nl/svn/trunk/LICENSE)
