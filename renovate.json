@@ -1,9 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "schedule": ["before 5am on monday"],
+  "schedule": ["before 5am"],
   "timezone": "America/Chicago",
   "labels": ["dependencies"],
+  "assignees": ["shaanmajid"],
   "packageRules": [
     {
       "matchManagers": ["github-actions"],

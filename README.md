@@ -43,6 +43,10 @@ docker pull ghcr.io/shaanmajid/unbound:latest
 
 Image versions correspond to the bundled [Unbound](https://nlnetlabs.nl/projects/unbound/about/) version. See the [Dockerfile](Dockerfile) for build details and the [releases page](https://github.com/shaanmajid/unbound-docker/releases) for changelogs.
 
+### Weekly Rebuilds
+
+The `latest` and current version tags (e.g., `1.24.0`) are rebuilt weekly to include Debian base image security updates. This ensures dependencies like libevent, libnghttp2, and ca-certificates stay current without requiring a new Unbound release. Use `docker pull` to get the latest build.
+
 ## What is Unbound?
 
 Unbound is a validating, recursive, and caching DNS resolver.
