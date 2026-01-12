@@ -1,13 +1,45 @@
 # Unbound DNS Server Docker Image
 
-A maintained fork of [mvance/unbound-docker](https://github.com/MatthewVance/unbound-docker) with current dependencies and automated releases via GitHub Actions.
+[![Build](https://github.com/shaanmajid/unbound-docker/actions/workflows/release.yml/badge.svg)](https://github.com/shaanmajid/unbound-docker/actions/workflows/release.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/shaanmajid/unbound)](https://hub.docker.com/r/shaanmajid/unbound)
+[![Image Size](https://img.shields.io/docker/image-size/shaanmajid/unbound/latest)](https://hub.docker.com/r/shaanmajid/unbound)
+
+A maintained fork of [mvance/unbound-docker](https://github.com/MatthewVance/unbound-docker) with multi-architecture support, current dependencies, and automated releases.
+
+## Supported Architectures
+
+Images are built for **linux/amd64** and **linux/arm64**. Docker automatically pulls the correct image for your platform.
+
+To pull a specific architecture:
+
+```console
+# Pull for amd64 (x86_64)
+docker pull --platform linux/amd64 shaanmajid/unbound:latest
+
+# Pull for arm64 (Apple Silicon, Raspberry Pi 4, etc.)
+docker pull --platform linux/arm64 shaanmajid/unbound:latest
+```
 
 ## Tags
 
-- [`latest`](https://hub.docker.com/r/shaanmajid/unbound/tags) — most recent stable release
-- [`1.24.2`](https://github.com/shaanmajid/unbound-docker/releases), `1.24`, `1` — semver tags
+Images are published to [Docker Hub](https://hub.docker.com/r/shaanmajid/unbound) and [GHCR](https://github.com/shaanmajid/unbound-docker/pkgs/container/unbound):
 
-Images are published to [Docker Hub](https://hub.docker.com/r/shaanmajid/unbound) and [GHCR](https://github.com/shaanmajid/unbound-docker/pkgs/container/unbound). See the [Dockerfile](Dockerfile) for build details.
+| Tag | Description |
+|-----|-------------|
+| `latest` | Most recent stable release |
+| `X.Y.Z` | Specific version (e.g., `1.24.0`) |
+| `X.Y` | Latest patch for minor version (e.g., `1.24`) |
+| `X` | Latest for major version (e.g., `1`) |
+
+```console
+# From Docker Hub
+docker pull shaanmajid/unbound:latest
+
+# From GHCR
+docker pull ghcr.io/shaanmajid/unbound:latest
+```
+
+Image versions correspond to the bundled [Unbound](https://nlnetlabs.nl/projects/unbound/about/) version. See the [Dockerfile](Dockerfile) for build details and the [releases page](https://github.com/shaanmajid/unbound-docker/releases) for changelogs.
 
 ## What is Unbound?
 
