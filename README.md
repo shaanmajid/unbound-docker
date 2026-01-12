@@ -27,7 +27,7 @@ Images are published to [Docker Hub](https://hub.docker.com/r/shaanmajid/unbound
 | Tag | Description |
 |-----|-------------|
 | `latest` | Most recent stable release |
-| `X.Y.Z` | Specific version (e.g., `1.24.0`) |
+| `X.Y.Z` | Specific version (e.g., `1.24.2`) |
 | `X.Y` | Latest patch for minor version (e.g., `1.24`) |
 | `X` | Latest for major version (e.g., `1`) |
 
@@ -45,7 +45,7 @@ Image versions correspond to the bundled [Unbound](https://nlnetlabs.nl/projects
 
 ### Weekly Rebuilds
 
-The `latest` and current version tags (e.g., `1.24.0`) are rebuilt weekly to include Debian base image security updates. This ensures dependencies like libevent, libnghttp2, and ca-certificates stay current without requiring a new Unbound release. Use `docker pull` to get the latest build.
+The `latest` and version tags (e.g., `1.24.2`) are rebuilt weekly to include Debian base image security patches. Run `docker pull` to get the freshest build.
 
 ## What is Unbound?
 
