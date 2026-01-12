@@ -46,6 +46,15 @@ Image versions correspond to the bundled [Unbound](https://nlnetlabs.nl/projects
 Unbound is a validating, recursive, and caching DNS resolver.
 > [unbound.net](https://unbound.net/)
 
+## Features
+
+This image is compiled with the following features enabled:
+
+- **dnstap** — DNS telemetry via Frame Streams protocol for logging and monitoring
+- **EDNS Client Subnet (ECS)** — Allows upstream servers to tailor responses based on client location
+- **DNS-over-TLS/HTTPS** — Forward queries to upstream resolvers over encrypted connections
+- **TCP Fast Open** — Reduced latency for TCP connections (client and server)
+
 ## How to use this image
 
 ### Standard usage
