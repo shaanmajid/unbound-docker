@@ -1,6 +1,7 @@
 # Unbound DNS Server Docker Image
 
 [![Build](https://github.com/shaanmajid/unbound-docker/actions/workflows/release.yml/badge.svg)](https://github.com/shaanmajid/unbound-docker/actions/workflows/release.yml)
+[![Rebuild](https://github.com/shaanmajid/unbound-docker/actions/workflows/rebuild.yml/badge.svg)](https://github.com/shaanmajid/unbound-docker/actions/workflows/rebuild.yml)
 [![Docker Pulls](https://img.shields.io/docker/pulls/shaanmajid/unbound)](https://hub.docker.com/r/shaanmajid/unbound)
 [![Image Size](https://img.shields.io/docker/image-size/shaanmajid/unbound/latest)](https://hub.docker.com/r/shaanmajid/unbound)
 
