@@ -391,8 +391,21 @@ remote-control:
 EOT
 fi
 
-mkdir -p /opt/unbound/etc/unbound/dev && \
-cp -a /dev/random /dev/urandom /dev/null /opt/unbound/etc/unbound/dev/
+# Only create device files if chroot is enabled.
+# When chroot is disabled (chroot: ""), Unbound can access /dev/ directly
+# and creating device nodes requires elevated privileges (CAP_MKNOD).
+chroot_enabled=true
+if [ -f /opt/unbound/etc/unbound/unbound.conf ]; then
+    # Check if chroot is explicitly disabled (empty string)
+    if grep -qE '^\s*chroot:\s*""' /opt/unbound/etc/unbound/unbound.conf; then
+        chroot_enabled=false
+    fi
+fi
+
+if [ "$chroot_enabled" = true ]; then
+    mkdir -p /opt/unbound/etc/unbound/dev && \
+    cp -a /dev/random /dev/urandom /dev/null /opt/unbound/etc/unbound/dev/
+fi
 
 mkdir -p -m 700 /opt/unbound/etc/unbound/var && \
 chown _unbound:_unbound /opt/unbound/etc/unbound/var && \
