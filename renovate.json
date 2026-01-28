@@ -1,33 +1,53 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "schedule": ["before 5am"],
+  "extends": [
+    "config:recommended"
+  ],
+  "schedule": [
+    "before 5am"
+  ],
   "timezone": "America/Chicago",
-  "labels": ["dependencies"],
-  "assignees": ["shaanmajid"],
+  "labels": [
+    "dependencies"
+  ],
+  "assignees": [
+    "shaanmajid"
+  ],
   "packageRules": [
     {
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "github-actions"
     },
     {
-      "matchManagers": ["dockerfile"],
+      "matchManagers": [
+        "dockerfile"
+      ],
       "groupName": "docker-base"
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["UNBOUND_VERSION=(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "managerFilePatterns": [
+        "/^Dockerfile$/"
+      ],
+      "matchStrings": [
+        "UNBOUND_VERSION=(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
       "depNameTemplate": "NLnetLabs/unbound",
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^release-(?<version>.+)$"
     },
     {
       "customType": "regex",
-      "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["VERSION_OPENSSL=openssl-(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "managerFilePatterns": [
+        "/^Dockerfile$/"
+      ],
+      "matchStrings": [
+        "VERSION_OPENSSL=openssl-(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
       "depNameTemplate": "openssl/openssl",
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^openssl-(?<version>.+)$"
