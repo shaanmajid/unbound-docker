@@ -83,7 +83,9 @@ jobs:
             org.opencontainers.image.created=${{ steps.version.outputs.created }}
           provenance: mode=max
           sbom: true
-          cache-from: type=gha
+          # Intentionally no cache-from: weekly rebuilds must fetch fresh base
+          # images and packages to catch upstream security updates. We still
+          # write to cache so build.yml benefits from the refreshed layers.
           cache-to: type=gha,mode=max
 
       - name: Attest Docker Hub image
