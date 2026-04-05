@@ -17,9 +17,12 @@ env:
   DOCKERHUB_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/unbound
   GHCR_IMAGE: ghcr.io/${{ github.repository_owner }}/unbound
 
+permissions: {}
+
 jobs:
   rebuild:
     runs-on: ubuntu-latest
+    environment: dockerhub
     permissions:
       contents: read
       packages: write
