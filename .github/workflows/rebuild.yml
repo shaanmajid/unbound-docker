@@ -30,6 +30,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Get current version and build time
         id: version
@@ -107,8 +109,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DIGEST: ${{ steps.build.outputs.digest }}
+          JOB_STATUS: ${{ job.status }}
+          STEPS_VERSION_OUTPUTS_CREATED: ${{ steps.version.outputs.created }}
+          STEPS_VERSION_OUTPUTS_VERSION: ${{ steps.version.outputs.version }}
+          VARS_DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
         run: |
-          status="${{ job.status }}"
+          status="${JOB_STATUS}"
           if [[ "$status" == "success" ]]; then
             emoji="white_check_mark"
           else
@@ -120,9 +126,9 @@ jobs:
 
           | Field | Value |
           |-------|-------|
-          | **Date** | ${{ steps.version.outputs.created }} |
-          | **Version** | [${{ steps.version.outputs.version }}](https://hub.docker.com/r/${{ vars.DOCKERHUB_USERNAME }}/unbound/tags?name=${{ steps.version.outputs.version }}) |
+          | **Date** | ${STEPS_VERSION_OUTPUTS_CREATED} |
+          | **Version** | [${STEPS_VERSION_OUTPUTS_VERSION}](https://hub.docker.com/r/${VARS_DOCKERHUB_USERNAME}/unbound/tags?name=${STEPS_VERSION_OUTPUTS_VERSION}) |
           | **Commit** | [\`${{ github.sha }}\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}) |
           | **Digest** | \`${digest_short}...\` |
-          | **Images** | [Docker Hub](https://hub.docker.com/r/${{ vars.DOCKERHUB_USERNAME }}/unbound) ・ [GHCR](https://github.com/${{ github.repository }}/pkgs/container/unbound) |
+          | **Images** | [Docker Hub](https://hub.docker.com/r/${VARS_DOCKERHUB_USERNAME}/unbound) ・ [GHCR](https://github.com/${{ github.repository }}/pkgs/container/unbound) |
           | **Run** | [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
