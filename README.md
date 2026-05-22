@@ -44,9 +44,9 @@ docker pull ghcr.io/shaanmajid/unbound:latest
 
 Image versions correspond to the bundled [Unbound](https://nlnetlabs.nl/projects/unbound/about/) version. See the [Dockerfile](Dockerfile) for build details and the [releases page](https://github.com/shaanmajid/unbound-docker/releases) for changelogs.
 
-### Weekly Rebuilds
+### Rebuilds and tag policy
 
-The `latest` and version tags (e.g., `1.24.2`) are rebuilt weekly to include Debian base image security patches. Run `docker pull` to get the freshest build.
+A weekly job rebuilds `latest` and the current release from a fresh Debian base, so `latest` carries OS security patches between Unbound releases. Once a newer version ships, an older `X.Y.Z` tag stops being rebuilt and no longer receives those patches. Pull `latest` for the freshest build, or pin a digest (`@sha256:...`) for a reproducible image.
 
 ## What is Unbound?
 
