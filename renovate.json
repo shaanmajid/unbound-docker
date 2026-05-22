@@ -25,6 +25,15 @@
         "dockerfile"
       ],
       "groupName": "docker-base"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "debian"
+      ],
+      "enabled": false
     }
   ],
   "customManagers": [
