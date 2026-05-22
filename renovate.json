@@ -34,6 +34,15 @@
         "debian"
       ],
       "enabled": false
+    },
+    {
+      "matchDatasources": [
+        "github-releases"
+      ],
+      "matchPackageNames": [
+        "openssl/openssl"
+      ],
+      "allowedVersions": "<4"
     }
   ],
   "customManagers": [
