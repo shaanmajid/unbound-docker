@@ -1,4 +1,4 @@
-FROM debian:trixie-20260505 AS openssl
+FROM debian:trixie AS openssl
 LABEL maintainer="Shaan Majid"
 
 ENV VERSION_OPENSSL=openssl-3.6.2 \
@@ -55,7 +55,7 @@ RUN set -e -x && \
         /var/tmp/* \
         /var/lib/apt/lists/*
 
-FROM debian:trixie-20260505 AS unbound
+FROM debian:trixie AS unbound
 LABEL maintainer="Shaan Majid"
 
 ENV NAME=unbound \
@@ -109,7 +109,7 @@ RUN build_deps="curl gcc libc-dev libevent-dev libexpat1-dev libnghttp2-dev make
         /var/lib/apt/lists/*
 
 
-FROM debian:trixie-20260505
+FROM debian:trixie
 LABEL maintainer="Shaan Majid"
 
 ARG UNBOUND_VERSION=1.24.2
