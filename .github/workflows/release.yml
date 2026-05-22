@@ -31,6 +31,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
@@ -48,6 +49,18 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Determine if release is newest stable
+        id: latest
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          highest="$(git tag --list 'v*' | grep -v -- '-' | sort -V | tail -n1)"
+          if [ -n "${highest}" ] && [ "${highest}" = "${REF_NAME}" ]; then
+            echo "is_latest=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "is_latest=false" >> "${GITHUB_OUTPUT}"
+          fi
+
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
@@ -57,10 +70,10 @@ jobs:
             ${{ env.GHCR_IMAGE }}
           tags: |
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
             type=sha,prefix=
-            type=raw,value=latest,enable=${{ !contains(github.ref_name, '-') }}
+            type=semver,pattern={{major}}.{{minor}},enable=${{ steps.latest.outputs.is_latest == 'true' }}
+            type=semver,pattern={{major}},enable=${{ steps.latest.outputs.is_latest == 'true' }}
+            type=raw,value=latest,enable=${{ steps.latest.outputs.is_latest == 'true' && !contains(github.ref_name, '-') }}
 
       - name: Build and push
         id: build
