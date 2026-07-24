@@ -60,8 +60,11 @@ LABEL maintainer="Shaan Majid"
 
 ENV NAME=unbound \
     UNBOUND_VERSION=1.25.2 \
-    UNBOUND_SHA256=0fe8b6277b0959cfd17562debac0aa5f71e0b02dc4ffa9c60271c583edab586f \
-    UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-1.25.1.tar.gz
+    UNBOUND_SHA256=0d92275c703d5f5f8baba3dab22117dd8c29b495588a5c229768ed6581566600
+
+# Separate instruction so the URL can interpolate UNBOUND_VERSION; variables set
+# within a single ENV cannot reference one another.
+ENV UNBOUND_DOWNLOAD_URL=https://nlnetlabs.nl/downloads/unbound/unbound-${UNBOUND_VERSION}.tar.gz
 
 WORKDIR /tmp/src
 
