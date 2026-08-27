@@ -1,7 +1,7 @@
 FROM debian:trixie AS openssl
 LABEL maintainer="Shaan Majid"
 
-ENV VERSION_OPENSSL=openssl-3.6.3 \
+ENV VERSION_OPENSSL=openssl-3.6.4 \
     SHA256_OPENSSL=243a86649cf6f23eeb6a2ff2456e09e5d77dd9018a54d3d96b0c6bdd6ba6c7f1 \
     SOURCE_OPENSSL=https://www.openssl.org/source/ \
     # OpenSSL OMC
